@@ -136,11 +136,26 @@ export const useSummaryManager = () => {
   };
 
   const handleSearch = async () => {
+    if (!searchKeyword.trim()) {
+      await runWithStatus(async () => {
+        await loadAllSummaries();
+        setMessage('Showing all summaries');
+      }, 'Failed to load summaries');
+      return;
+    }
+
     await runWithStatus(async () => {
       const summaries = await getSummariesByKeyword(searchKeyword);
       setResults(summaries ?? []);
       setMessage(`Found ${summaries?.length ?? 0} summaries`);
     }, 'Search failed');
+  };
+
+  const handleShowAll = async () => {
+    await runWithStatus(async () => {
+      await loadAllSummaries();
+      setMessage('Showing all summaries');
+    }, 'Failed to load summaries');
   };
 
   return {
@@ -156,6 +171,7 @@ export const useSummaryManager = () => {
     handleAdd,
     handleUpdate,
     handleDelete,
-    handleSearch
+    handleSearch,
+    handleShowAll
   };
 };

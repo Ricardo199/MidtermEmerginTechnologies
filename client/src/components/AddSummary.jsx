@@ -19,7 +19,8 @@ const AddSummary = () => {
     handleAdd,
     handleUpdate,
     handleDelete,
-    handleSearch
+    handleSearch,
+    handleShowAll
   } = useSummaryManager();
 
   return (
@@ -47,6 +48,7 @@ const AddSummary = () => {
           searchKeyword={searchKeyword}
           setSearchKeyword={setSearchKeyword}
           onSearch={handleSearch}
+          onShowAll={handleShowAll}
           isBusy={isBusy}
         />
 
