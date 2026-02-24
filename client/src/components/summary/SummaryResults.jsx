@@ -1,5 +1,6 @@
 import { Table, Badge, Button } from 'react-bootstrap';
 
+// Results table with per-row actions.
 const SummaryResults = ({ results, onEdit, onDelete, isBusy }) => {
   return (
     <>
@@ -17,13 +18,13 @@ const SummaryResults = ({ results, onEdit, onDelete, isBusy }) => {
             <th>Keywords</th>
             <th>Rating</th>
             <th>Words</th>
-              <th>Action</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {results.length === 0 ? (
             <tr>
-                <td colSpan={6} className="text-center py-3">No summaries to display</td>
+              <td colSpan={6} className="text-center py-3">No summaries to display</td>
             </tr>
           ) : (
             results.map((item) => (
@@ -33,22 +34,22 @@ const SummaryResults = ({ results, onEdit, onDelete, isBusy }) => {
                 <td>{(item.keywords ?? []).join(', ')}</td>
                 <td>{item.rating}</td>
                 <td>{item.wordCount}</td>
-                  <td>
-                    <div className="d-flex gap-2">
-                      <Button type="button" size="sm" variant="outline-primary" onClick={() => onEdit(item)}>
-                        Edit
-                      </Button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="outline-danger"
-                        onClick={() => onDelete(item.summaryID)}
-                        disabled={isBusy}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </td>
+                <td>
+                  <div className="d-flex gap-2">
+                    <Button type="button" size="sm" variant="outline-primary" onClick={() => onEdit(item)}>
+                      Edit
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline-danger"
+                      onClick={() => onDelete(item.summaryID)}
+                      disabled={isBusy}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </td>
               </tr>
             ))
           )}

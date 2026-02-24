@@ -5,6 +5,7 @@ import SummaryActions from './summary/SummaryActions';
 import SummarySearch from './summary/SummarySearch';
 import SummaryResults from './summary/SummaryResults';
 
+// Page-level summary management container.
 const AddSummary = () => {
   const {
     formState,
@@ -32,6 +33,7 @@ const AddSummary = () => {
         <h2 className="section-title mb-3">Summary Management</h2>
 
         <Form onSubmit={(event) => event.preventDefault()}>
+          {/* Form fields and create/update actions */}
           <SummaryForm
             formState={formState}
             autoWordCount={autoWordCount}
@@ -47,6 +49,7 @@ const AddSummary = () => {
 
         <hr className="my-4" />
 
+        {/* Search controls */}
         <SummarySearch
           searchKeyword={searchKeyword}
           setSearchKeyword={setSearchKeyword}
@@ -66,6 +69,7 @@ const AddSummary = () => {
           </Alert>
         )}
 
+        {/* Summary list with row actions */}
         <SummaryResults
           results={results}
           onEdit={handleEditSummary}

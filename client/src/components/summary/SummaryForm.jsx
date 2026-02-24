@@ -1,5 +1,6 @@
 import { Form, Row, Col } from 'react-bootstrap';
 
+// Form fields for create/update operations.
 const SummaryForm = ({ formState, autoWordCount, onFieldChange }) => {
   return (
     <>

@@ -1,5 +1,6 @@
 import { Button, ButtonGroup } from 'react-bootstrap';
 
+// Create/update action buttons.
 const SummaryActions = ({ isBusy, canUpdate, onAdd, onUpdate }) => {
   return (
     <div className="actions-row mt-3">

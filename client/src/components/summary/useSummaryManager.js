@@ -7,6 +7,7 @@ import {
   deleteSummary
 } from '../SummaryApi';
 
+// Initial state used when creating a new summary.
 const defaultFormState = {
   summaryID: '',
   originalText: '',
@@ -17,6 +18,7 @@ const defaultFormState = {
 };
 
 export const useSummaryManager = () => {
+  // UI and form state.
   const [formState, setFormState] = useState(defaultFormState);
   const [editingSummaryID, setEditingSummaryID] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -26,6 +28,7 @@ export const useSummaryManager = () => {
   const [isMessageFading, setIsMessageFading] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
 
+  // Parse keywords from comma-separated input.
   const keywordList = useMemo(
     () =>
       formState.keywords
@@ -35,11 +38,13 @@ export const useSummaryManager = () => {
     [formState.keywords]
   );
 
+  // Compute a fallback word count from original text.
   const autoWordCount = useMemo(() => {
     const text = formState.originalText.trim();
     return text ? text.split(/\s+/).length : 0;
   }, [formState.originalText]);
 
+  // Generic field setter for controlled inputs.
   const updateField = (name, value) => {
     if (name === 'summaryID' && value !== editingSummaryID) {
       setEditingSummaryID('');
@@ -48,6 +53,7 @@ export const useSummaryManager = () => {
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Normalized payload shape expected by GraphQL mutations.
   const payload = {
     summaryID: formState.summaryID,
     originalText: formState.originalText,
@@ -57,6 +63,7 @@ export const useSummaryManager = () => {
     wordCount: Number(formState.wordCount || autoWordCount)
   };
 
+  // Basic client-side validation before write operations.
   const validatePayload = () => {
     if (!payload.summaryID.trim() || !payload.originalText.trim() || !payload.summary.trim()) {
       return 'Summary ID, Original Text, and Summary are required.';
@@ -77,6 +84,7 @@ export const useSummaryManager = () => {
     return null;
   };
 
+  // Shared wrapper for async actions with message handling.
   const runWithStatus = async (work, failureText) => {
     try {
       setIsBusy(true);
@@ -93,11 +101,13 @@ export const useSummaryManager = () => {
     }
   };
 
+  // Load full summary list from API.
   const loadAllSummaries = async () => {
     const summaries = await getAllSummaries();
     setResults(summaries ?? []);
   };
 
+  // Initial data fetch.
   useEffect(() => {
     runWithStatus(async () => {
       await loadAllSummaries();
@@ -105,6 +115,7 @@ export const useSummaryManager = () => {
     }, 'Failed to load summaries');
   }, []);
 
+  // Fade out success messages after a short delay.
   useEffect(() => {
     if (!message || messageType !== 'success') {
       setIsMessageFading(false);
@@ -126,6 +137,7 @@ export const useSummaryManager = () => {
     };
   }, [message, messageType]);
 
+  // Create summary flow.
   const handleAdd = async () => {
     const validationError = validatePayload();
     if (validationError) {
@@ -141,6 +153,7 @@ export const useSummaryManager = () => {
     }, 'Add failed');
   };
 
+  // Update summary flow.
   const handleUpdate = async () => {
     const validationError = validatePayload();
     if (validationError) {
@@ -160,6 +173,7 @@ export const useSummaryManager = () => {
     }, 'Update failed');
   };
 
+  // Delete summary flow.
   const handleDeleteSummary = async (summaryID) => {
     const confirmed = window.confirm(`Delete summary ${summaryID}? This action cannot be undone.`);
     if (!confirmed) {
@@ -177,6 +191,7 @@ export const useSummaryManager = () => {
     }, 'Delete failed');
   };
 
+  // Search by keyword. Empty query restores full list.
   const handleSearch = async () => {
     if (!searchKeyword.trim()) {
       await runWithStatus(async () => {
@@ -193,6 +208,7 @@ export const useSummaryManager = () => {
     }, 'Search failed');
   };
 
+  // Explicitly restore full list.
   const handleShowAll = async () => {
     await runWithStatus(async () => {
       await loadAllSummaries();
@@ -200,6 +216,7 @@ export const useSummaryManager = () => {
     }, 'Failed to load summaries');
   };
 
+  // Load selected row data into form for editing.
   const handleEditSummary = (summaryItem) => {
     setFormState({
       summaryID: summaryItem.summaryID ?? '',
@@ -215,6 +232,7 @@ export const useSummaryManager = () => {
     setMessage(`Loaded summary ${summaryItem.summaryID} into form for editing`);
   };
 
+  // Update is enabled only when editing an existing row.
   const canUpdate =
     Boolean(editingSummaryID) && formState.summaryID.trim() === editingSummaryID;
 

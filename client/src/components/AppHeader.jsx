@@ -1,5 +1,6 @@
 import { Card } from 'react-bootstrap';
 
+// Page header section.
 const AppHeader = () => {
   return (
     <Card className="mb-4 header-card">

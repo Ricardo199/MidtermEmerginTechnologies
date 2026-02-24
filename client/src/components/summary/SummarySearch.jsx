@@ -1,5 +1,6 @@
 import { Form, Row, Col, Button } from 'react-bootstrap';
 
+// Search controls for filtering or restoring summaries.
 const SummarySearch = ({ searchKeyword, setSearchKeyword, onSearch, onShowAll, isBusy }) => {
   return (
     <>

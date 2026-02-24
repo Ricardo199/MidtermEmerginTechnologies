@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// MongoDB schema for summary documents.
 const textSummarySchema = new mongoose.Schema(
   {
     summaryID: {
@@ -43,6 +44,7 @@ const textSummarySchema = new mongoose.Schema(
   }
 );
 
+// Collection model for summary data.
 const TextSummary = mongoose.model('TextSummary', textSummarySchema);
 
 export default TextSummary;

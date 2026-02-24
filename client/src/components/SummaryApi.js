@@ -1,8 +1,10 @@
-// Creates a new summary through the GraphQL mutation `addSummary`.
-// Expects `summaryData` to match the backend input shape.
+// Shared GraphQL endpoint for all requests.
+const GRAPHQL_ENDPOINT = 'http://localhost:4000/graphql';
+
+// Fetch all summaries.
 export async function getAllSummaries() {
   try {
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,12 +34,10 @@ export async function getAllSummaries() {
   }
 }
 
-// Creates a new summary through the GraphQL mutation `addSummary`.
-// Expects `summaryData` to match the backend input shape.
+// Create one summary.
 export async function addSummary(summaryData) {
   try {
-    // Send a standard GraphQL POST request to the API endpoint.
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,21 +59,18 @@ export async function addSummary(summaryData) {
       }),
     });
 
-    // GraphQL responses are wrapped in a `data` object.
     const result = await response.json();
     return result.data.addSummary;
   } catch (error) {
-    // Log and rethrow so calling code can still handle the failure.
     console.error('Error adding summary:', error);
     throw error;
   }
 }
 
-// Fetches summaries filtered by a single keyword.
-// Returns an array from the `getKeyword` query.
+// Fetch summaries by keyword.
 export async function getSummariesByKeyword(keyword) {
   try {
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -103,11 +100,10 @@ export async function getSummariesByKeyword(keyword) {
   }
 }
 
-// Updates an existing summary by ID.
-// `summaryID` identifies the record, `updatedData` contains new field values.
+// Update a summary by ID.
 export async function updateSummary(summaryID, updatedData) {
   try {
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -137,11 +133,10 @@ export async function updateSummary(summaryID, updatedData) {
   }
 }
 
-// Deletes a summary by ID.
-// Returns a boolean (`true` if deletion succeeded).
+// Delete a summary by ID.
 export async function deleteSummary(summaryID) {
   try {
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

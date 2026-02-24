@@ -2,6 +2,7 @@ import AppHeader from './components/AppHeader';
 import AddSummary from './components/AddSummary';
 import { Container, Row, Col } from 'react-bootstrap';
 
+// Top-level page layout.
 const App = () => {
   return (
     <main className="app-shell">
