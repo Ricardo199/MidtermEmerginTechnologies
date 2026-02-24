@@ -161,6 +161,11 @@ export const useSummaryManager = () => {
   };
 
   const handleDeleteSummary = async (summaryID) => {
+    const confirmed = window.confirm(`Delete summary ${summaryID}? This action cannot be undone.`);
+    if (!confirmed) {
+      return;
+    }
+
     await runWithStatus(async () => {
       const deleted = await deleteSummary(summaryID);
       await loadAllSummaries();
