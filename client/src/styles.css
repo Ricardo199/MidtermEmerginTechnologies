@@ -90,3 +90,16 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
+.table-caption {
+  caption-side: top;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+@media (max-width: 768px) {
+  .app-content {
+    width: min(980px, 96vw);
+    padding: 0.25rem;
+  }
+}
