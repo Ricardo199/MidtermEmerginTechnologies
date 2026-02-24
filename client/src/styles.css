@@ -107,6 +107,17 @@ body {
   color: #6c757d;
 }
 
+.status-alert {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.status-alert-fade {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
 @media (max-width: 768px) {
   .app-content {
     width: min(980px, 96vw);

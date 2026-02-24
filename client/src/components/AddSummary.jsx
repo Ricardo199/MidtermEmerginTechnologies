@@ -14,6 +14,7 @@ const AddSummary = () => {
     results,
     message,
     messageType,
+    isMessageFading,
     isBusy,
     autoWordCount,
     handleAdd,
@@ -53,7 +54,12 @@ const AddSummary = () => {
         />
 
         {message && (
-          <Alert className="mt-3 mb-3" variant={messageType} role="status" aria-live="polite">
+          <Alert
+            className={`mt-3 mb-3 status-alert ${isMessageFading ? 'status-alert-fade' : ''}`}
+            variant={messageType}
+            role="status"
+            aria-live="polite"
+          >
             {message}
           </Alert>
         )}

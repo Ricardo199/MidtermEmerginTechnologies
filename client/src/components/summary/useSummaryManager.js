@@ -22,6 +22,7 @@ export const useSummaryManager = () => {
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('success');
+  const [isMessageFading, setIsMessageFading] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
 
   const keywordList = useMemo(
@@ -75,9 +76,11 @@ export const useSummaryManager = () => {
     try {
       setIsBusy(true);
       setMessage('');
+      setIsMessageFading(false);
       setMessageType('success');
       await work();
     } catch {
+      setIsMessageFading(false);
       setMessageType('danger');
       setMessage(failureText);
     } finally {
@@ -96,6 +99,27 @@ export const useSummaryManager = () => {
       setMessage(`Loaded summaries`);
     }, 'Failed to load summaries');
   }, []);
+
+  useEffect(() => {
+    if (!message || messageType !== 'success') {
+      setIsMessageFading(false);
+      return;
+    }
+
+    const fadeTimeoutId = setTimeout(() => {
+      setIsMessageFading(true);
+    }, 1800);
+
+    const clearTimeoutId = setTimeout(() => {
+      setMessage('');
+      setIsMessageFading(false);
+    }, 2500);
+
+    return () => {
+      clearTimeout(fadeTimeoutId);
+      clearTimeout(clearTimeoutId);
+    };
+  }, [message, messageType]);
 
   const handleAdd = async () => {
     const validationError = validatePayload();
@@ -186,6 +210,7 @@ export const useSummaryManager = () => {
     results,
     message,
     messageType,
+    isMessageFading,
     isBusy,
     autoWordCount,
     handleAdd,
