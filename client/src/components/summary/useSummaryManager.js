@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
+  getAllSummaries,
   addSummary,
   getSummariesByKeyword,
   updateSummary,
@@ -84,6 +85,18 @@ export const useSummaryManager = () => {
     }
   };
 
+  const loadAllSummaries = async () => {
+    const summaries = await getAllSummaries();
+    setResults(summaries ?? []);
+  };
+
+  useEffect(() => {
+    runWithStatus(async () => {
+      await loadAllSummaries();
+      setMessage(`Loaded summaries`);
+    }, 'Failed to load summaries');
+  }, []);
+
   const handleAdd = async () => {
     const validationError = validatePayload();
     if (validationError) {
@@ -94,6 +107,7 @@ export const useSummaryManager = () => {
 
     await runWithStatus(async () => {
       const created = await addSummary(payload);
+      await loadAllSummaries();
       setMessage(`Added summary ${created.summaryID}`);
     }, 'Add failed');
   };
@@ -108,6 +122,7 @@ export const useSummaryManager = () => {
 
     await runWithStatus(async () => {
       const updated = await updateSummary(payload.summaryID, payload);
+      await loadAllSummaries();
       setMessage(updated ? `Updated summary ${payload.summaryID}` : 'Summary not found');
     }, 'Update failed');
   };
@@ -115,6 +130,7 @@ export const useSummaryManager = () => {
   const handleDelete = async () => {
     await runWithStatus(async () => {
       const deleted = await deleteSummary(payload.summaryID);
+      await loadAllSummaries();
       setMessage(deleted ? `Deleted summary ${payload.summaryID}` : 'Summary not found');
     }, 'Delete failed');
   };

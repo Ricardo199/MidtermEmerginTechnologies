@@ -1,5 +1,39 @@
 // Creates a new summary through the GraphQL mutation `addSummary`.
 // Expects `summaryData` to match the backend input shape.
+export async function getAllSummaries() {
+  try {
+    const response = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+          query GetAllSummaries {
+            getSummaries {
+              summaryID
+              originalText
+              summary
+              keywords
+              rating
+              wordCount
+              timestamp
+            }
+          }
+        `,
+      }),
+    });
+
+    const result = await response.json();
+    return result.data.getSummaries;
+  } catch (error) {
+    console.error('Error fetching all summaries:', error);
+    throw error;
+  }
+}
+
+// Creates a new summary through the GraphQL mutation `addSummary`.
+// Expects `summaryData` to match the backend input shape.
 export async function addSummary(summaryData) {
   try {
     // Send a standard GraphQL POST request to the API endpoint.
