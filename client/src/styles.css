@@ -2,7 +2,7 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  background: #f4f6fb;
+  background: #f6f7f9;
 }
 
 .app-shell {
@@ -22,9 +22,9 @@ body {
 }
 
 .header-card {
-  border: 0;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(14, 20, 34, 0.08);
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: none;
 }
 
 .app-header h1 {
@@ -36,14 +36,19 @@ body {
 }
 
 .panel-card {
-  border: 0;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(14, 20, 34, 0.08);
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: none;
 }
 
 .section-title {
   font-size: 1.2rem;
   margin-bottom: 1rem;
+}
+
+.subsection-title {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .centered-content {
@@ -89,6 +94,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.actions-row {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .table-caption {
