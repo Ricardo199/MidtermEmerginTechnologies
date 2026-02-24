@@ -3,7 +3,7 @@ import { Table, Badge, Button } from 'react-bootstrap';
 const SummaryResults = ({ results, onEdit, onDelete, isBusy }) => {
   return (
     <>
-      <div className="results-header">
+      <div className="results-header mt-3">
         <h3 className="subsection-title mb-0">Results</h3>
         <Badge bg="dark">{results.length}</Badge>
       </div>
