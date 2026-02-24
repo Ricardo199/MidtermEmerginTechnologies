@@ -14,14 +14,17 @@ body {
 
 .app-content {
   width: min(900px, 92vw);
-  background: #fff;
-  border-radius: 12px;
-  padding: 1.25rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem;
 }
 
 .app-header {
   text-align: center;
+}
+
+.header-card {
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(14, 20, 34, 0.08);
 }
 
 .app-header h1 {
@@ -80,4 +83,10 @@ body {
 .search-row button {
   padding: 0.45rem 0.85rem;
   cursor: pointer;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
