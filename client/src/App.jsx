@@ -1,11 +1,15 @@
-import { gql, useQuery } from '@apollo/client';
-import { Container, Row, Col, Card, Spinner, Alert } from 'react-bootstrap';
 import AppHeader from './components/AppHeader';
-import AddUserForm from './components/AddUserForm';
-import UserList from './components/UserList';
+import AddSummary from './components/AddSummary';
 
 const App = () => {
-  const { data, loading, error, refetch } = useQuery(GET_USERS);  
+  return (
+    <main className="app-shell">
+      <div className="app-content">
+        <AppHeader />
+        <AddSummary />
+      </div>
+    </main>
+  );
 };
 
 export default App;
