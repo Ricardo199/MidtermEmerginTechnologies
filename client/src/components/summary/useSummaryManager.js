@@ -18,6 +18,7 @@ const defaultFormState = {
 
 export const useSummaryManager = () => {
   const [formState, setFormState] = useState(defaultFormState);
+  const [editingSummaryID, setEditingSummaryID] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState('');
@@ -40,6 +41,10 @@ export const useSummaryManager = () => {
   }, [formState.originalText]);
 
   const updateField = (name, value) => {
+    if (name === 'summaryID' && value !== editingSummaryID) {
+      setEditingSummaryID('');
+    }
+
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -149,6 +154,7 @@ export const useSummaryManager = () => {
       await loadAllSummaries();
       if (updated) {
         setFormState(defaultFormState);
+        setEditingSummaryID('');
       }
       setMessage(updated ? `Updated summary ${payload.summaryID}` : 'Summary not found');
     }, 'Update failed');
@@ -160,6 +166,7 @@ export const useSummaryManager = () => {
       await loadAllSummaries();
       if (formState.summaryID === summaryID) {
         setFormState(defaultFormState);
+        setEditingSummaryID('');
       }
       setMessage(deleted ? `Deleted summary ${summaryID}` : 'Summary not found');
     }, 'Delete failed');
@@ -197,10 +204,14 @@ export const useSummaryManager = () => {
       rating: summaryItem.rating != null ? String(summaryItem.rating) : '',
       wordCount: summaryItem.wordCount != null ? String(summaryItem.wordCount) : ''
     });
+    setEditingSummaryID(summaryItem.summaryID ?? '');
 
     setMessageType('success');
     setMessage(`Loaded summary ${summaryItem.summaryID} into form for editing`);
   };
+
+  const canUpdate =
+    Boolean(editingSummaryID) && formState.summaryID.trim() === editingSummaryID;
 
   return {
     formState,
@@ -212,6 +223,7 @@ export const useSummaryManager = () => {
     messageType,
     isMessageFading,
     isBusy,
+    canUpdate,
     autoWordCount,
     handleAdd,
     handleUpdate,

@@ -16,6 +16,7 @@ const AddSummary = () => {
     messageType,
     isMessageFading,
     isBusy,
+    canUpdate,
     autoWordCount,
     handleAdd,
     handleUpdate,
@@ -38,6 +39,7 @@ const AddSummary = () => {
           />
           <SummaryActions
             isBusy={isBusy}
+            canUpdate={canUpdate}
             onAdd={handleAdd}
             onUpdate={handleUpdate}
           />
