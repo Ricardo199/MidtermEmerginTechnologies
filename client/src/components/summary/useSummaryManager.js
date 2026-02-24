@@ -123,15 +123,21 @@ export const useSummaryManager = () => {
     await runWithStatus(async () => {
       const updated = await updateSummary(payload.summaryID, payload);
       await loadAllSummaries();
+      if (updated) {
+        setFormState(defaultFormState);
+      }
       setMessage(updated ? `Updated summary ${payload.summaryID}` : 'Summary not found');
     }, 'Update failed');
   };
 
-  const handleDelete = async () => {
+  const handleDeleteSummary = async (summaryID) => {
     await runWithStatus(async () => {
-      const deleted = await deleteSummary(payload.summaryID);
+      const deleted = await deleteSummary(summaryID);
       await loadAllSummaries();
-      setMessage(deleted ? `Deleted summary ${payload.summaryID}` : 'Summary not found');
+      if (formState.summaryID === summaryID) {
+        setFormState(defaultFormState);
+      }
+      setMessage(deleted ? `Deleted summary ${summaryID}` : 'Summary not found');
     }, 'Delete failed');
   };
 
@@ -184,7 +190,7 @@ export const useSummaryManager = () => {
     autoWordCount,
     handleAdd,
     handleUpdate,
-    handleDelete,
+    handleDeleteSummary,
     handleSearch,
     handleShowAll,
     handleEditSummary

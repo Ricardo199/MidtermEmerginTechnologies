@@ -1,6 +1,6 @@
 import { Table, Badge, Button } from 'react-bootstrap';
 
-const SummaryResults = ({ results, onEdit }) => {
+const SummaryResults = ({ results, onEdit, onDelete, isBusy }) => {
   return (
     <>
       <div className="results-header">
@@ -34,9 +34,20 @@ const SummaryResults = ({ results, onEdit }) => {
                 <td>{item.rating}</td>
                 <td>{item.wordCount}</td>
                   <td>
-                    <Button type="button" size="sm" variant="outline-primary" onClick={() => onEdit(item)}>
-                      Edit
-                    </Button>
+                    <div className="d-flex gap-2">
+                      <Button type="button" size="sm" variant="outline-primary" onClick={() => onEdit(item)}>
+                        Edit
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={() => onDelete(item.summaryID)}
+                        disabled={isBusy}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </td>
               </tr>
             ))

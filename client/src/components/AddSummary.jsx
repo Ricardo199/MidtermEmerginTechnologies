@@ -18,7 +18,7 @@ const AddSummary = () => {
     autoWordCount,
     handleAdd,
     handleUpdate,
-    handleDelete,
+    handleDeleteSummary,
     handleSearch,
     handleShowAll,
     handleEditSummary
@@ -39,7 +39,6 @@ const AddSummary = () => {
             isBusy={isBusy}
             onAdd={handleAdd}
             onUpdate={handleUpdate}
-            onDelete={handleDelete}
           />
         </Form>
 
@@ -59,7 +58,12 @@ const AddSummary = () => {
           </Alert>
         )}
 
-        <SummaryResults results={results} onEdit={handleEditSummary} />
+        <SummaryResults
+          results={results}
+          onEdit={handleEditSummary}
+          onDelete={handleDeleteSummary}
+          isBusy={isBusy}
+        />
       </Card.Body>
     </Card>
   );
