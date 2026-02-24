@@ -4,6 +4,11 @@ import bodyParser from 'body-parser';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { gql } from 'graphql-tag';
+import dotenv from 'dotenv';
+import { connectToDatabase } from './config/db.js';
+import TextSummary from './models/TextSummary.js';
+
+dotenv.config();
 
 // Apollo/Express server port
 const PORT = 4000;
@@ -25,7 +30,7 @@ type TextSummary{
 
 type Query {
     getSummaries: [TextSummary]! #(returns a list of all text summaries)
-    getsummaryID(summaryID: ID!): TextSummary #(accepts a summaryID and returns the corresponding summary details)
+  getsummaryID(summaryID: ID!): TextSummary #(accepts a summaryID and returns the corresponding summary details)
     getOriginalText(originalText: String!): [TextSummary] #(accepts original text and returns summaries that match or closely relate to that text)
     getTimestamp(timestamp: String!): [TextSummary] #(accepts a timestamp and returns summaries created at that time)
     getKeyword(keyword: String!): [TextSummary] #(accepts a keyword and returns summaries that include that keyword)
@@ -47,58 +52,64 @@ type Mutation {
     deleteSummary(summaryID: ID!): Boolean #(accepts a summaryID and deletes the corresponding summary from the database, returning true if successful)
 }`;
 
-// In-memory storage for summaries.
-// Note: this resets whenever the server restarts.
-let summaries = [];
-
 // Resolver map connects each GraphQL operation in the schema
 // to the JavaScript function that returns the result.
 const resolvers = {
   Query: {
     // Return every stored summary
-    getSummaries: () => summaries,
+    getSummaries: async () => TextSummary.find().sort({ timestamp: -1 }),
 
     // Find a single summary by its ID
-    getsummaryID: (_, { summaryID }) => summaries.find(s => s.summaryID === summaryID),
+    getsummaryID: async (_, { summaryID }) => TextSummary.findOne({ summaryID }),
 
     // Return summaries whose original text contains the input substring
-    getOriginalText: (_, { originalText }) => summaries.filter(s => s.originalText.includes(originalText)),
+    getOriginalText: async (_, { originalText }) =>
+      TextSummary.find({ originalText: { $regex: originalText, $options: 'i' } }),
 
     // Return summaries that exactly match the provided timestamp
-    getTimestamp: (_, { timestamp }) => summaries.filter(s => s.timestamp === timestamp),
+    getTimestamp: async (_, { timestamp }) => TextSummary.find({ timestamp }),
 
     // Return summaries containing the given keyword
-    getKeyword: (_, { keyword }) => summaries.filter(s => s.keywords.includes(keyword)),
+    getKeyword: async (_, { keyword }) => TextSummary.find({ keywords: keyword }),
 
     // Return summaries with rating inside the min/max range (inclusive)
-    getRatingRange: (_, { minRating, maxRating }) => summaries.filter(s => s.rating >= minRating && s.rating <= maxRating)
+    getRatingRange: async (_, { minRating, maxRating }) =>
+      TextSummary.find({ rating: { $gte: minRating, $lte: maxRating } })
   },    
 
   Mutation: {
     // Create and store a new summary
     // Timestamp is generated on the server at creation time.
-    addSummary: (_, { input }) => {
-      const newSummary = { ...input, timestamp: new Date().toISOString() };
-      summaries.push(newSummary);
-      return newSummary;
+    addSummary: async (_, { input }) => {
+      const createdSummary = await TextSummary.create({
+        ...input,
+        timestamp: new Date().toISOString()
+      });
+
+      return createdSummary;
     },
 
     // Update an existing summary by ID.
     // Returns null if the summary does not exist.
-    updateSummary: (_, { summaryID, input }) => {
-      const index = summaries.findIndex(s => s.summaryID === summaryID);
-      if (index === -1) return null;
-      summaries[index] = { ...input, summaryID, timestamp: new Date().toISOString() };
-      return summaries[index];
+    updateSummary: async (_, { summaryID, input }) => {
+      const updatedSummary = await TextSummary.findOneAndUpdate(
+        { summaryID },
+        {
+          ...input,
+          summaryID,
+          timestamp: new Date().toISOString()
+        },
+        { new: true }
+      );
+
+      return updatedSummary;
     },
 
     // Delete a summary by ID.
     // Returns false if the summary is not found.
-    deleteSummary: (_, { summaryID }) => {
-      const index = summaries.findIndex(s => s.summaryID === summaryID);
-      if (index === -1) return false;
-      summaries.splice(index, 1);
-      return true;
+    deleteSummary: async (_, { summaryID }) => {
+      const deletionResult = await TextSummary.deleteOne({ summaryID });
+      return deletionResult.deletedCount > 0;
     }
   }
 };
@@ -107,6 +118,8 @@ const app = express();
 
 // Bootstraps Apollo and attaches it to Express at /graphql.
 const start = async () => {
+  await connectToDatabase();
+
   const server = new ApolloServer({ typeDefs, resolvers });
   await server.start();
 
