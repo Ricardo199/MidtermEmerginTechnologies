@@ -158,6 +158,20 @@ export const useSummaryManager = () => {
     }, 'Failed to load summaries');
   };
 
+  const handleEditSummary = (summaryItem) => {
+    setFormState({
+      summaryID: summaryItem.summaryID ?? '',
+      originalText: summaryItem.originalText ?? '',
+      summary: summaryItem.summary ?? '',
+      keywords: (summaryItem.keywords ?? []).join(', '),
+      rating: summaryItem.rating != null ? String(summaryItem.rating) : '',
+      wordCount: summaryItem.wordCount != null ? String(summaryItem.wordCount) : ''
+    });
+
+    setMessageType('success');
+    setMessage(`Loaded summary ${summaryItem.summaryID} into form for editing`);
+  };
+
   return {
     formState,
     updateField,
@@ -172,6 +186,7 @@ export const useSummaryManager = () => {
     handleUpdate,
     handleDelete,
     handleSearch,
-    handleShowAll
+    handleShowAll,
+    handleEditSummary
   };
 };

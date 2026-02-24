@@ -1,6 +1,6 @@
-import { Table, Badge } from 'react-bootstrap';
+import { Table, Badge, Button } from 'react-bootstrap';
 
-const SummaryResults = ({ results }) => {
+const SummaryResults = ({ results, onEdit }) => {
   return (
     <>
       <div className="results-header">
@@ -17,12 +17,13 @@ const SummaryResults = ({ results }) => {
             <th>Keywords</th>
             <th>Rating</th>
             <th>Words</th>
+              <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {results.length === 0 ? (
             <tr>
-              <td colSpan={5} className="text-center py-3">No summaries to display</td>
+                <td colSpan={6} className="text-center py-3">No summaries to display</td>
             </tr>
           ) : (
             results.map((item) => (
@@ -32,6 +33,11 @@ const SummaryResults = ({ results }) => {
                 <td>{(item.keywords ?? []).join(', ')}</td>
                 <td>{item.rating}</td>
                 <td>{item.wordCount}</td>
+                  <td>
+                    <Button type="button" size="sm" variant="outline-primary" onClick={() => onEdit(item)}>
+                      Edit
+                    </Button>
+                  </td>
               </tr>
             ))
           )}

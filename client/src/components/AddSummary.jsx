@@ -20,7 +20,8 @@ const AddSummary = () => {
     handleUpdate,
     handleDelete,
     handleSearch,
-    handleShowAll
+    handleShowAll,
+    handleEditSummary
   } = useSummaryManager();
 
   return (
@@ -58,7 +59,7 @@ const AddSummary = () => {
           </Alert>
         )}
 
-        <SummaryResults results={results} />
+        <SummaryResults results={results} onEdit={handleEditSummary} />
       </Card.Body>
     </Card>
   );
