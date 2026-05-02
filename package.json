@@ -1,5 +1,5 @@
 {
-  "name": "midterm-fullstack-graphql",
+  "name": "summary-manager",
   "version": "1.0.0",
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace server\" \"npm run dev --workspace client\"",

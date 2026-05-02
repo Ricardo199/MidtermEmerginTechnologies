@@ -1,4 +1,4 @@
-# Midterm Summary Manager (React + GraphQL + MongoDB)
+# Summary Manager (React + GraphQL + MongoDB)
 
 A full-stack summary management app built with:
 
@@ -23,7 +23,7 @@ A full-stack summary management app built with:
 ## Project Structure
 
 ```text
-Midterm/
+summary-manager/
   client/                 # React Vite frontend
     src/
       components/
